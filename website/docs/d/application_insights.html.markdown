@@ -30,7 +30,7 @@ output "application_insights_instrumentation_key" {
 
 ## Attributes Reference
 
-* `id` - The ID of the Application Insights component.
+* `id` - The ID of the Virtual Machine.
 * `app_id` - The App ID associated with this Application Insights component.
 * `application_type` - The type of the component.
 * `instrumentation_key` - The instrumentation key of the Application Insights component.

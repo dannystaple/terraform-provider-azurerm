@@ -36,7 +36,6 @@ var ValidateWebApplicationFirewallPolicyRuleSetVersion = validation.StringInSlic
 	"2.2.9",
 	"3.0",
 	"3.1",
-	"3.2",
 }, false)
 
 var ValidateWebApplicationFirewallPolicyRuleSetType = validation.StringInSlice([]string{

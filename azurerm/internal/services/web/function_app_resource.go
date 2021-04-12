@@ -115,15 +115,6 @@ func resourceFunctionApp() *schema.Resource {
 				Computed: true,
 			},
 
-			"client_cert_mode": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ValidateFunc: validation.StringInSlice([]string{
-					"Required",
-					"Optional",
-				}, false),
-			},
-
 			"daily_memory_time_quota": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -296,8 +287,6 @@ func resourceFunctionAppCreate(d *schema.ResourceData, meta interface{}) error {
 	appServicePlanID := d.Get("app_service_plan_id").(string)
 	enabled := d.Get("enabled").(bool)
 	clientAffinityEnabled := d.Get("client_affinity_enabled").(bool)
-	clientCertMode := d.Get("client_cert_mode").(string)
-	clientCertEnabled := clientCertMode != ""
 	httpsOnly := d.Get("https_only").(bool)
 	dailyMemoryTimeQuota := d.Get("daily_memory_time_quota").(int)
 	t := d.Get("tags").(map[string]interface{})
@@ -326,15 +315,10 @@ func resourceFunctionAppCreate(d *schema.ResourceData, meta interface{}) error {
 			ServerFarmID:          utils.String(appServicePlanID),
 			Enabled:               utils.Bool(enabled),
 			ClientAffinityEnabled: utils.Bool(clientAffinityEnabled),
-			ClientCertEnabled:     utils.Bool(clientCertEnabled),
 			HTTPSOnly:             utils.Bool(httpsOnly),
 			DailyMemoryTimeQuota:  utils.Int32(int32(dailyMemoryTimeQuota)),
 			SiteConfig:            &siteConfig,
 		},
-	}
-
-	if clientCertMode != "" {
-		siteEnvelope.SiteProperties.ClientCertMode = web.ClientCertMode(clientCertMode)
 	}
 
 	if _, ok := d.GetOk("identity"); ok {
@@ -415,8 +399,6 @@ func resourceFunctionAppUpdate(d *schema.ResourceData, meta interface{}) error {
 	appServicePlanID := d.Get("app_service_plan_id").(string)
 	enabled := d.Get("enabled").(bool)
 	clientAffinityEnabled := d.Get("client_affinity_enabled").(bool)
-	clientCertMode := d.Get("client_cert_mode").(string)
-	clientCertEnabled := clientCertMode != ""
 	httpsOnly := d.Get("https_only").(bool)
 	dailyMemoryTimeQuota := d.Get("daily_memory_time_quota").(int)
 	t := d.Get("tags").(map[string]interface{})
@@ -446,15 +428,10 @@ func resourceFunctionAppUpdate(d *schema.ResourceData, meta interface{}) error {
 			ServerFarmID:          utils.String(appServicePlanID),
 			Enabled:               utils.Bool(enabled),
 			ClientAffinityEnabled: utils.Bool(clientAffinityEnabled),
-			ClientCertEnabled:     utils.Bool(clientCertEnabled),
 			HTTPSOnly:             utils.Bool(httpsOnly),
 			DailyMemoryTimeQuota:  utils.Int32(int32(dailyMemoryTimeQuota)),
 			SiteConfig:            &siteConfig,
 		},
-	}
-
-	if clientCertMode != "" {
-		siteEnvelope.SiteProperties.ClientCertMode = web.ClientCertMode(clientCertMode)
 	}
 
 	if _, ok := d.GetOk("identity"); ok {
@@ -634,12 +611,6 @@ func resourceFunctionAppRead(d *schema.ResourceData, meta interface{}) error {
 		d.Set("possible_outbound_ip_addresses", props.PossibleOutboundIPAddresses)
 		d.Set("client_affinity_enabled", props.ClientAffinityEnabled)
 		d.Set("custom_domain_verification_id", props.CustomDomainVerificationID)
-
-		clientCertMode := ""
-		if props.ClientCertEnabled != nil && *props.ClientCertEnabled {
-			clientCertMode = string(props.ClientCertMode)
-		}
-		d.Set("client_cert_mode", clientCertMode)
 	}
 
 	appSettings := flattenAppServiceAppSettings(appSettingsResp.Properties)
