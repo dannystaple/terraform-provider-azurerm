@@ -139,7 +139,7 @@ resource "azurerm_data_factory_linked_service_azure_databricks" "test" {
   resource_group_name        = azurerm_resource_group.test.name
   data_factory_name          = azurerm_data_factory.test.name
   msi_work_space_resource_id = "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/test/providers/Microsoft.Databricks/workspaces/testworkspace"
-  
+
   description         = "Initial description"
   annotations         = ["test1", "test2"]
   existing_cluster_id = "test"
@@ -264,7 +264,7 @@ resource "azurerm_data_factory_linked_service_azure_databricks" "test" {
   resource_group_name        = azurerm_resource_group.test.name
   data_factory_name          = azurerm_data_factory.test.name
   msi_work_space_resource_id = "/subscriptions/11111111-1111-1111-1111-111111111111/resourceGroups/test/providers/Microsoft.Databricks/workspaces/testworkspace"
-  
+
   description = "Initial description"
   annotations = ["test1", "test2"]
   adb_domain  = "https://adb-111111111.11.azuredatabricks.net"
