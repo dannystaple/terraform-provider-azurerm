@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/mysql/parse"
-
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/azure"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/acceptance"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/acceptance/check"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/clients"
@@ -83,15 +82,19 @@ func TestAccMySQLDatabase_charsetMixedcase(t *testing.T) {
 	})
 }
 
-func (r MySQLDatabaseResource) Exists(ctx context.Context, clients *clients.Client, state *terraform.InstanceState) (*bool, error) {
-	id, err := parse.DatabaseID(state.ID)
+func (t MySQLDatabaseResource) Exists(ctx context.Context, clients *clients.Client, state *terraform.InstanceState) (*bool, error) {
+	id, err := azure.ParseAzureResourceID(state.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := clients.MySQL.DatabasesClient.Get(ctx, id.ResourceGroup, id.ServerName, id.Name)
+	resourceGroup := id.ResourceGroup
+	serverName := id.Path["servers"]
+	name := id.Path["databases"]
+
+	resp, err := clients.MySQL.DatabasesClient.Get(ctx, resourceGroup, serverName, name)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("reading MySQL Database (%s): %+v", id, err)
 	}
 
 	return utils.Bool(resp.ID != nil), nil

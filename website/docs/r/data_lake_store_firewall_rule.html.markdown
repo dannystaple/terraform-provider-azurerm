@@ -15,7 +15,7 @@ Manages a Azure Data Lake Store Firewall Rule.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "northeurope"
 }
 
 resource "azurerm_data_lake_store" "example" {

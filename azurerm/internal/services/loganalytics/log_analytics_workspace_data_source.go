@@ -79,7 +79,6 @@ func dataSourceLogAnalyticsWorkspace() *schema.Resource {
 func dataSourceLogAnalyticsWorkspaceRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.Client).LogAnalytics.WorkspacesClient
 	sharedKeysClient := meta.(*clients.Client).LogAnalytics.SharedKeysClient
-	subscriptionId := meta.(*clients.Client).Account.SubscriptionId
 	ctx, cancel := timeouts.ForRead(meta.(*clients.Client).StopContext, d)
 	defer cancel()
 
@@ -94,7 +93,10 @@ func dataSourceLogAnalyticsWorkspaceRead(d *schema.ResourceData, meta interface{
 		return fmt.Errorf("Error making Read request on AzureRM Log Analytics workspaces '%s': %+v", name, err)
 	}
 
-	id := parse.NewLogAnalyticsWorkspaceID(subscriptionId, resGroup, name)
+	id, err := parse.LogAnalyticsWorkspaceID(*resp.ID)
+	if err != nil {
+		return fmt.Errorf("Error parsing Log Analytics Workspace ID %q", *resp.ID)
+	}
 	d.SetId(id.ID())
 
 	d.Set("name", resp.Name)

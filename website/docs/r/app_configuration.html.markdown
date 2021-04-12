@@ -15,7 +15,7 @@ Manages an Azure App Configuration.
 
 ```hcl
 resource "azurerm_resource_group" "rg" {
-  name     = "example-resources"
+  name     = "resourceGroup1"
   location = "West Europe"
 }
 

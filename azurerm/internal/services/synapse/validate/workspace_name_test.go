@@ -15,13 +15,8 @@ func TestWorkspaceName(t *testing.T) {
 			expected: false,
 		},
 		{
-			// 1 char
-			input:    "a",
-			expected: true,
-		},
-		{
 			// basic example
-			input:    "abc-123",
+			input:    "abc123",
 			expected: true,
 		},
 		{
@@ -35,28 +30,23 @@ func TestWorkspaceName(t *testing.T) {
 			expected: false,
 		},
 		{
-			// can't contain `-ondemand`
-			input:    "abc-ondemand123",
+			// can't contain hyphen
+			input:    "ab-c",
 			expected: false,
 		},
 		{
-			// must start lowercase char or number
-			input:    "-abc123",
+			// can't end with `ondemand`
+			input:    "abcondemand",
 			expected: false,
 		},
 		{
-			// must end lowercase char or number
-			input:    "abc123-",
-			expected: false,
-		},
-		{
-			// 50 chars
-			input:    "abcdefghijklmnopqrstuvwxyz-abcdefghijklmnopqrstuvw",
+			// 45 chars
+			input:    "abcdefghijklmnopqrstuvwxyzabcdefabcdefghijklm",
 			expected: true,
 		},
 		{
-			// 51 chars
-			input:    "abcdefghijklmnopqrstuvwxyz-abcdefghijklmnopqrstuvwx",
+			// 46 chars
+			input:    "abcdefghijklmnopqrstuvwxyzabcdefabcdefghijklmn",
 			expected: false,
 		},
 	}

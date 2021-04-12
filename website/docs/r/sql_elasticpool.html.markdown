@@ -17,7 +17,7 @@ Allows you to manage an Azure SQL Elastic Pool.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "my-resource-group"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_sql_server" "example" {

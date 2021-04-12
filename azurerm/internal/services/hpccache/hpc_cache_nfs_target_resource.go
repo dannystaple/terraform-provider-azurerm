@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/Azure/azure-sdk-for-go/services/storagecache/mgmt/2021-03-01/storagecache"
+	"github.com/Azure/azure-sdk-for-go/services/storagecache/mgmt/2020-03-01/storagecache"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/azure"
@@ -78,13 +78,6 @@ func resourceHPCCacheNFSTarget() *schema.Resource {
 							Default:      "",
 							ValidateFunc: validate.CacheNFSTargetPath,
 						},
-
-						"access_policy_name": {
-							Type:         schema.TypeString,
-							Optional:     true,
-							Default:      "default",
-							ValidateFunc: validation.StringIsNotEmpty,
-						},
 					},
 				},
 			},
@@ -134,9 +127,9 @@ func resourceHPCCacheNFSTargetCreateOrUpdate(d *schema.ResourceData, meta interf
 
 	// Construct parameters
 	param := &storagecache.StorageTarget{
-		StorageTargetProperties: &storagecache.StorageTargetProperties{
+		BasicStorageTargetProperties: &storagecache.Nfs3TargetProperties{
 			Junctions:  expandNamespaceJunctions(d.Get("namespace_junction").(*schema.Set).List()),
-			TargetType: storagecache.StorageTargetTypeNfs3,
+			TargetType: storagecache.TargetTypeNfs3,
 			Nfs3: &storagecache.Nfs3Target{
 				Target:     utils.String(d.Get("target_host_name").(string)),
 				UsageModel: utils.String(d.Get("usage_model").(string)),
@@ -191,8 +184,9 @@ func resourceHPCCacheNFSTargetRead(d *schema.ResourceData, meta interface{}) err
 	d.Set("resource_group_name", id.ResourceGroup)
 	d.Set("cache_name", id.CacheName)
 
-	if props := resp.StorageTargetProperties; props != nil {
-		if props.TargetType != storagecache.StorageTargetTypeNfs3 {
+	if props := resp.BasicStorageTargetProperties; props != nil {
+		props, ok := props.AsNfs3TargetProperties()
+		if !ok {
 			return fmt.Errorf("The type of this HPC Cache Target %q (Resource Group %q, Cahe %q) is not a NFS Target", id.Name, id.ResourceGroup, id.CacheName)
 		}
 		if nfs3 := props.Nfs3; nfs3 != nil {
@@ -235,10 +229,9 @@ func expandNamespaceJunctions(input []interface{}) *[]storagecache.NamespaceJunc
 	for _, v := range input {
 		b := v.(map[string]interface{})
 		result = append(result, storagecache.NamespaceJunction{
-			NamespacePath:   utils.String(b["namespace_path"].(string)),
-			NfsExport:       utils.String(b["nfs_export"].(string)),
-			TargetPath:      utils.String(b["target_path"].(string)),
-			NfsAccessPolicy: utils.String(b["access_policy_name"].(string)),
+			NamespacePath: utils.String(b["namespace_path"].(string)),
+			NfsExport:     utils.String(b["nfs_export"].(string)),
+			TargetPath:    utils.String(b["target_path"].(string)),
 		})
 	}
 
@@ -268,16 +261,10 @@ func flattenNamespaceJunctions(input *[]storagecache.NamespaceJunction) []interf
 			targetPath = *v
 		}
 
-		accessPolicy := ""
-		if v := e.NfsAccessPolicy; v != nil {
-			accessPolicy = *e.NfsAccessPolicy
-		}
-
 		output = append(output, map[string]interface{}{
-			"namespace_path":     namespacePath,
-			"nfs_export":         nfsExport,
-			"target_path":        targetPath,
-			"access_policy_name": accessPolicy,
+			"namespace_path": namespacePath,
+			"nfs_export":     nfsExport,
+			"target_path":    targetPath,
 		})
 	}
 

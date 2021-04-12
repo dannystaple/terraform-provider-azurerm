@@ -15,7 +15,7 @@ Manages a MariaDB Database within a MariaDB Server
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "tfex-mariadb-database-RG"
-  location = "West Europe"
+  location = "westeurope"
 }
 
 resource "azurerm_mariadb_server" "example" {

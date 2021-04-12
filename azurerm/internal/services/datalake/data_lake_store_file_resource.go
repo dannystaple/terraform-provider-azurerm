@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/url"
 	"os"
@@ -111,7 +112,7 @@ func resourceDataLakeStoreFileCreate(d *schema.ResourceData, meta interface{}) e
 			// last chunk
 			flag = filesystem.CLOSE
 		}
-		chunk := io.NopCloser(bytes.NewReader(buffer[:n]))
+		chunk := ioutil.NopCloser(bytes.NewReader(buffer[:n]))
 
 		if _, err = client.Append(ctx, accountName, remoteFilePath, chunk, nil, flag, nil, nil); err != nil {
 			return fmt.Errorf("Error transferring chunk for Data Lake Store File %q : %+v", remoteFilePath, err)

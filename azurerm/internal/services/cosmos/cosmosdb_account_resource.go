@@ -355,8 +355,7 @@ func resourceCosmosDbAccount() *schema.Resource {
 				Computed:  true,
 				Sensitive: true,
 				Elem: &schema.Schema{
-					Type:      schema.TypeString,
-					Sensitive: true,
+					Type: schema.TypeString,
 				},
 			},
 

@@ -19,8 +19,8 @@ At this time you cannot use a Virtual Network with in-line Subnets in conjunctio
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "acceptanceTestResourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_network_security_group" "example" {

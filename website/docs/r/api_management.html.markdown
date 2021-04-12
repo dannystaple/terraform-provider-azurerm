@@ -104,11 +104,12 @@ A `additional_location` block supports the following:
 
 A `certificate` block supports the following:
 
-* `encoded_certificate` - (Required) The Base64 Encoded PFX or Base64 Encoded X.509 Certificate.
+* `encoded_certificate` - (Required) The Base64 Encoded PFX Certificate.
+
+* `certificate_password` - (Required) The password for the certificate.
 
 * `store_name` - (Required) The name of the Certificate Store where this certificate should be stored. Possible values are `CertificateAuthority` and `Root`.
 
-* `certificate_password` - (Optional) The password for the certificate.
 
 ---
 

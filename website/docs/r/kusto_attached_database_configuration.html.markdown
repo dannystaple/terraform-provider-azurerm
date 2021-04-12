@@ -15,7 +15,7 @@ Manages a Kusto (also known as Azure Data Explorer) Attached Database Configurat
 ```hcl
 resource "azurerm_resource_group" "rg" {
   name     = "my-kusto-rg"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_kusto_cluster" "follower_cluster" {

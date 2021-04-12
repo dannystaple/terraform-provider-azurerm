@@ -78,7 +78,7 @@ func resourceArmMaintenanceAssignmentVirtualMachineCreate(d *schema.ResourceData
 	}
 
 	maintenanceConfigurationID := d.Get("maintenance_configuration_id").(string)
-	configurationId, _ := parse.MaintenanceConfigurationIDInsensitively(maintenanceConfigurationID)
+	configurationId, _ := parse.MaintenanceConfigurationID(maintenanceConfigurationID)
 
 	// set assignment name to configuration name
 	assignmentName := configurationId.Name
@@ -137,11 +137,7 @@ func resourceArmMaintenanceAssignmentVirtualMachineRead(d *schema.ResourceData, 
 	}
 
 	// in list api, `ResourceID` returned is always nil
-	virtualMachineId := ""
-	if id.VirtualMachineId != nil {
-		virtualMachineId = id.VirtualMachineId.ID()
-	}
-	d.Set("virtual_machine_id", virtualMachineId)
+	d.Set("virtual_machine_id", id.VirtualMachineIdRaw)
 	if props := assignment.ConfigurationAssignmentProperties; props != nil {
 		d.Set("maintenance_configuration_id", props.MaintenanceConfigurationID)
 	}

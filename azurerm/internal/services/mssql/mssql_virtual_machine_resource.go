@@ -649,10 +649,6 @@ func flattenSqlVirtualMachineAutoBackup(autoBackup *sqlvirtualmachine.AutoBackup
 		var logBackupFrequency int
 		if autoBackup.LogBackupFrequency != nil {
 			logBackupFrequency = int(*autoBackup.LogBackupFrequency)
-			// API returns 60 minutes as zero
-			if logBackupFrequency == 0 {
-				logBackupFrequency = 60
-			}
 		}
 
 		manualSchedule = []interface{}{

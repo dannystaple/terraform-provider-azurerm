@@ -178,7 +178,7 @@ provider "azurerm" {
   features {}
 }
 resource "azurerm_resource_group" "test" {
-  name     = "acctestRG-rg-%d"
+  name     = "acctest-rg-%d"
   location = "%s"
 }
 

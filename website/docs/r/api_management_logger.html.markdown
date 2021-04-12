@@ -16,7 +16,7 @@ Manages a Logger within an API Management Service.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_application_insights" "example" {

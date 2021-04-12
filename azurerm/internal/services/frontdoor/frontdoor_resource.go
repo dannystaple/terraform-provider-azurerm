@@ -347,6 +347,7 @@ func resourceFrontDoor() *schema.Resource {
 
 			"backend_pool": {
 				Type:     schema.TypeList,
+				MaxItems: 50,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{

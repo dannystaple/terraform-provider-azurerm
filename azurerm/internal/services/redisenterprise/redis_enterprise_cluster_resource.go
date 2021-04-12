@@ -81,7 +81,6 @@ func resourceRedisEnterpriseCluster() *schema.Resource {
 			},
 
 			// RP currently does not return this value, but will in the near future (RP defaults to 1.2)
-			// https://github.com/Azure/azure-sdk-for-go/issues/14420
 			// "minimum_tls_version": {
 			// 	Type:     schema.TypeString,
 			// 	Optional: true,
@@ -94,19 +93,15 @@ func resourceRedisEnterpriseCluster() *schema.Resource {
 			// },
 
 			// RP currently does not return this value, but will in the near future
-			// https://github.com/Azure/azure-sdk-for-go/issues/14420
 			"hostname": {
-				Type:       schema.TypeString,
-				Computed:   true,
-				Deprecated: "This field currently is not yet being returned from the service API, please see https://github.com/Azure/azure-sdk-for-go/issues/14420 for more information",
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 
 			// RP currently does not return this value, but will in the near future
-			// https://github.com/Azure/azure-sdk-for-go/issues/14420
 			"version": {
-				Type:       schema.TypeString,
-				Computed:   true,
-				Deprecated: "This field currently is not yet being returned from the service API, please see https://github.com/Azure/azure-sdk-for-go/issues/14420 for more information",
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 
 			"tags": tags.ForceNewSchema(),
@@ -162,7 +157,6 @@ func resourceRedisEnterpriseClusterCreate(d *schema.ResourceData, meta interface
 	}
 
 	// RP currently does not return this value but will in the near future
-	// https://github.com/Azure/azure-sdk-for-go/issues/14420
 	// if v, ok := d.GetOk("minimum_tls_version"); ok {
 	// 	parameters.ClusterProperties.MinimumTLSVersion = redisenterprise.TLSVersion(v.(string))
 	// }

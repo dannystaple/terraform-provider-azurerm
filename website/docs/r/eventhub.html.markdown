@@ -14,8 +14,8 @@ Manages a Event Hubs as a nested resource within a Event Hubs namespace.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_eventhub_namespace" "example" {

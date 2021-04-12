@@ -15,8 +15,8 @@ Manages a proximity placement group for virtual machines, virtual machine scale 
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_proximity_placement_group" "example" {

@@ -18,8 +18,8 @@ At this time you cannot use a Route Table with in-line Routes in conjunction wit
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "acceptanceTestResourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_route_table" "example" {

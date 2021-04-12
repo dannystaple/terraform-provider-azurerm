@@ -17,7 +17,7 @@ data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "rg" {
   name     = "KustoRG"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_kusto_cluster" "example" {

@@ -15,7 +15,7 @@ Manages an Activity Log Alert within Azure Monitor.
 ```hcl
 resource "azurerm_resource_group" "main" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_monitor_action_group" "main" {

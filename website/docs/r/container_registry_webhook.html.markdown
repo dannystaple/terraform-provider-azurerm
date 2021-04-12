@@ -15,8 +15,8 @@ Manages an Azure Container Registry Webhook.
 
 ```hcl
 resource "azurerm_resource_group" "rg" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_container_registry" "acr" {

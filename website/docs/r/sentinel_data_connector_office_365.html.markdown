@@ -15,7 +15,7 @@ Manages a Office 365 Data Connector.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-rg"
-  location = "West Europe"
+  location = "west europe"
 }
 
 resource "azurerm_log_analytics_workspace" "example" {

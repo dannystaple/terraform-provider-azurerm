@@ -15,7 +15,7 @@ Manages a resources Advanced Threat Protection setting.
 ```hcl
 resource "azurerm_resource_group" "rg" {
   name     = "atp-example"
-  location = "West Europe"
+  location = "northeurope"
 }
 
 resource "azurerm_storage_account" "example" {

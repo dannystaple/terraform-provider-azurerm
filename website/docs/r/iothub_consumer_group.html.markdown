@@ -14,8 +14,8 @@ Manages a Consumer Group within an IotHub
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_iothub" "example" {

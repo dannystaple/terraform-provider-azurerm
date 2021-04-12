@@ -14,8 +14,8 @@ Manages an IotHub Device Provisioning Service Certificate.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_iothub_dps" "example" {

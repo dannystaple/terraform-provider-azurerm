@@ -50,11 +50,6 @@ func dataSourceKeyVaultSecret() *schema.Resource {
 				Computed: true,
 			},
 
-			"versionless_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-
 			"tags": tags.SchemaDataSource(),
 		},
 	}
@@ -99,7 +94,6 @@ func dataSourceKeyVaultSecretRead(d *schema.ResourceData, meta interface{}) erro
 	d.Set("value", resp.Value)
 	d.Set("version", respID.Version)
 	d.Set("content_type", resp.ContentType)
-	d.Set("versionless_id", respID.VersionlessID())
 
 	return tags.FlattenAndSet(d, resp.Tags)
 }

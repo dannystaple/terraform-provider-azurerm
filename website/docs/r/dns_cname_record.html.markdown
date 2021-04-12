@@ -14,8 +14,8 @@ Enables you to manage DNS CNAME Records within Azure DNS.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "acceptanceTestResourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_dns_zone" "example" {
@@ -36,8 +36,8 @@ resource "azurerm_dns_cname_record" "example" {
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "acceptanceTestResourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_dns_zone" "example" {

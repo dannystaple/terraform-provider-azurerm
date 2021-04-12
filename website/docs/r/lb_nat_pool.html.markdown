@@ -19,7 +19,7 @@ Manages a Load Balancer NAT pool.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "LoadBalancerRG"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_public_ip" "example" {

@@ -15,7 +15,7 @@ Manages a Log Analytics (formally Operational Insights) Saved Search.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_log_analytics_workspace" "example" {

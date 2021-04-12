@@ -15,7 +15,7 @@ Manages Azure Backup for an Azure VM
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "tfex-recovery_vault"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_recovery_services_vault" "example" {

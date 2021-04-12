@@ -173,7 +173,7 @@ func TestAccManagementGroup_withSubscriptions(t *testing.T) {
 			),
 		},
 		{
-			Config: r.removeSubscriptions(),
+			Config: r.basic(),
 			Check: resource.ComposeTestCheckFunc(
 				check.That(data.ResourceName).ExistsInAzure(r),
 				check.That(data.ResourceName).Key("subscription_ids.#").HasValue("0"),
@@ -282,16 +282,4 @@ resource "azurerm_management_group" "test" {
   ]
 }
 `, subscriptionID)
-}
-
-func (r ManagementGroupResource) removeSubscriptions() string {
-	return `
-provider "azurerm" {
-  features {}
-}
-
-resource "azurerm_management_group" "test" {
-  subscription_ids = []
-}
-`
 }

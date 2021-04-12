@@ -14,8 +14,8 @@ Enables you to manage Private DNS zones within Azure DNS. These zones are hosted
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "acceptanceTestResourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_private_dns_zone" "example" {

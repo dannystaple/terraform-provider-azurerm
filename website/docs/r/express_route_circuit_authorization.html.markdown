@@ -15,7 +15,7 @@ Manages an ExpressRoute Circuit Authorization.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "exprtTest"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_express_route_circuit" "example" {

@@ -18,8 +18,8 @@ Manages an Azure Container Registry.
 
 ```hcl
 resource "azurerm_resource_group" "rg" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_container_registry" "acr" {
@@ -60,15 +60,11 @@ The following arguments are supported:
 
 * `network_rule_set` - (Optional) A `network_rule_set` block as documented below.
 
-* `public_network_access_enabled` - (Optional) Whether public network access is allowed for the container registry. Defaults to `true`.
-
-* `quarantine_policy_enabled` - (Optional) Boolean value that indicates whether quarantine policy is enabled. Defaults to `false`.
-
 * `retention_policy` - (Optional) A `retention_policy` block as documented below.
 
 * `trust_policy` - (Optional) A `trust_policy` block as documented below.
 
-~> **NOTE:** `quarantine_policy_enabled`, `retention_policy` and `trust_policy` are only supported on resources with the `Premium` SKU.
+~> **NOTE:** `retention_policy` and `trust_policy` are only supported on resources with the `Premium` SKU.
 
 `network_rule_set` supports the following:
 

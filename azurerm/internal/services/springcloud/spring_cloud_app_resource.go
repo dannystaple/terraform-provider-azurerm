@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/Azure/azure-sdk-for-go/services/preview/appplatform/mgmt/2020-11-01-preview/appplatform"
+	"github.com/Azure/azure-sdk-for-go/services/appplatform/mgmt/2020-07-01/appplatform"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/azure"
@@ -94,12 +94,6 @@ func resourceSpringCloudApp() *schema.Resource {
 				},
 			},
 
-			"tls_enabled": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
-			},
-
 			"fqdn": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -151,8 +145,7 @@ func resourceSpringCloudAppCreate(d *schema.ResourceData, meta interface{}) erro
 		Location: serviceResp.Location,
 		Identity: identity,
 		Properties: &appplatform.AppResourceProperties{
-			EnableEndToEndTLS: utils.Bool(d.Get("tls_enabled").(bool)),
-			Public:            utils.Bool(d.Get("is_public").(bool)),
+			Public: utils.Bool(d.Get("is_public").(bool)),
 		},
 	}
 	future, err := client.CreateOrUpdate(ctx, resourceGroup, serviceName, name, app)
@@ -196,10 +189,9 @@ func resourceSpringCloudAppUpdate(d *schema.ResourceData, meta interface{}) erro
 	app := appplatform.AppResource{
 		Identity: identity,
 		Properties: &appplatform.AppResourceProperties{
-			EnableEndToEndTLS: utils.Bool(d.Get("tls_enabled").(bool)),
-			Public:            utils.Bool(d.Get("is_public").(bool)),
-			HTTPSOnly:         utils.Bool(d.Get("https_only").(bool)),
-			PersistentDisk:    expandSpringCloudAppPersistentDisk(d.Get("persistent_disk").([]interface{})),
+			Public:         utils.Bool(d.Get("is_public").(bool)),
+			HTTPSOnly:      utils.Bool(d.Get("https_only").(bool)),
+			PersistentDisk: expandSpringCloudAppPersistentDisk(d.Get("persistent_disk").([]interface{})),
 		},
 	}
 	future, err := client.CreateOrUpdate(ctx, id.ResourceGroup, id.SpringName, id.AppName, app)
@@ -246,7 +238,6 @@ func resourceSpringCloudAppRead(d *schema.ResourceData, meta interface{}) error 
 		d.Set("https_only", prop.HTTPSOnly)
 		d.Set("fqdn", prop.Fqdn)
 		d.Set("url", prop.URL)
-		d.Set("tls_enabled", prop.EnableEndToEndTLS)
 
 		if err := d.Set("persistent_disk", flattenSpringCloudAppPersistentDisk(prop.PersistentDisk)); err != nil {
 			return fmt.Errorf("setting `persistent_disk`: %s", err)

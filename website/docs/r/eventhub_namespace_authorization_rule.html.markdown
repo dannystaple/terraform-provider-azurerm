@@ -15,7 +15,7 @@ Manages an Authorization Rule for an Event Hub Namespace.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "resourcegroup"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_eventhub_namespace" "example" {

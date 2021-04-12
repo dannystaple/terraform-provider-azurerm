@@ -36,5 +36,3 @@ The following arguments are supported:
 - `default_function_key` - Function App resource's default function key.
 
 - `master_key` - Function App resource's secret key
-
-- `event_grid_extension_config_key` - Function App resource's Event Grid Extension Config system key.

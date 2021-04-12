@@ -12,8 +12,6 @@ import (
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/azure"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/tf"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/clients"
-	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/services/mysql/parse"
-	azSchema "github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/tf/schema"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/timeouts"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/utils"
 )
@@ -24,10 +22,9 @@ func resourceMySQLAdministrator() *schema.Resource {
 		Read:   resourceMySQLAdministratorRead,
 		Update: resourceMySQLAdministratorCreateUpdate,
 		Delete: resourceMySQLAdministratorDelete,
-		Importer: azSchema.ValidateResourceIDPriorToImport(func(id string) error {
-			_, err := parse.AzureActiveDirectoryAdministratorID(id)
-			return err
-		}),
+		Importer: &schema.ResourceImporter{
+			State: schema.ImportStatePassthrough,
+		},
 
 		Timeouts: &schema.ResourceTimeout{
 			Create: schema.DefaultTimeout(30 * time.Minute),
@@ -67,7 +64,6 @@ func resourceMySQLAdministrator() *schema.Resource {
 
 func resourceMySQLAdministratorCreateUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.Client).MySQL.ServerAdministratorsClient
-	subscriptionId := meta.(*clients.Client).Account.SubscriptionId
 	ctx, cancel := timeouts.ForCreateUpdate(meta.(*clients.Client).StopContext, d)
 	defer cancel()
 
@@ -77,17 +73,16 @@ func resourceMySQLAdministratorCreateUpdate(d *schema.ResourceData, meta interfa
 	objectId := uuid.FromStringOrNil(d.Get("object_id").(string))
 	tenantId := uuid.FromStringOrNil(d.Get("tenant_id").(string))
 
-	id := parse.NewAzureActiveDirectoryAdministratorID(subscriptionId, d.Get("resource_group_name").(string), d.Get("server_name").(string), "activeDirectory")
 	if d.IsNewResource() {
 		existing, err := client.Get(ctx, resGroup, serverName)
 		if err != nil {
 			if !utils.ResponseWasNotFound(existing.Response) {
-				return fmt.Errorf("checking for presence of existing %s: %+v", id, err)
+				return fmt.Errorf("Error checking for presence of existing MySQL AD Administrator (Resource Group %q, Server %q): %+v", resGroup, serverName, err)
 			}
 		}
 
-		if !utils.ResponseWasNotFound(existing.Response) {
-			return tf.ImportAsExistsError("azurerm_mysql_active_directory_administrator", id.ID())
+		if existing.ID != nil && *existing.ID != "" {
+			return tf.ImportAsExistsError("azurerm_mysql_active_directory_administrator", *existing.ID)
 		}
 	}
 
@@ -102,14 +97,20 @@ func resourceMySQLAdministratorCreateUpdate(d *schema.ResourceData, meta interfa
 
 	future, err := client.CreateOrUpdate(ctx, resGroup, serverName, parameters)
 	if err != nil {
-		return fmt.Errorf("creating/updating %s: %+v", id, err)
+		return fmt.Errorf("Error issuing create/update request for MySQL AD Administrator (Resource Group %q, Server %q): %+v", resGroup, serverName, err)
 	}
 
 	if err = future.WaitForCompletionRef(ctx, client.Client); err != nil {
-		return fmt.Errorf("waiting for create/update of %s: %+v", id, err)
+		return fmt.Errorf("Error waiting on create/update future for MySQL AD Administrator (Resource Group %q, Server %q): %+v", resGroup, serverName, err)
 	}
 
-	d.SetId(id.ID())
+	resp, err := client.Get(ctx, resGroup, serverName)
+	if err != nil {
+		return fmt.Errorf("Error issuing get request for MySQL AD Administrator (Resource Group %q, Server %q): %+v", resGroup, serverName, err)
+	}
+
+	d.SetId(*resp.ID)
+
 	return nil
 }
 
@@ -118,24 +119,27 @@ func resourceMySQLAdministratorRead(d *schema.ResourceData, meta interface{}) er
 	ctx, cancel := timeouts.ForRead(meta.(*clients.Client).StopContext, d)
 	defer cancel()
 
-	id, err := parse.AzureActiveDirectoryAdministratorID(d.Id())
+	id, err := azure.ParseAzureResourceID(d.Id())
 	if err != nil {
 		return err
 	}
 
-	resp, err := client.Get(ctx, id.ResourceGroup, id.ServerName)
+	resourceGroup := id.ResourceGroup
+	serverName := id.Path["servers"]
+
+	resp, err := client.Get(ctx, resourceGroup, serverName)
 	if err != nil {
 		if utils.ResponseWasNotFound(resp.Response) {
-			log.Printf("[INFO] %s was not found - removing from state", *id)
+			log.Printf("[INFO] Error reading MySQL AD administrator %q - removing from state", d.Id())
 			d.SetId("")
 			return nil
 		}
 
-		return fmt.Errorf("retrieving %s: %+v", *id, err)
+		return fmt.Errorf("Error reading MySQL AD administrator: %+v", err)
 	}
 
-	d.Set("resource_group_name", id.ResourceGroup)
-	d.Set("server_name", id.ServerName)
+	d.Set("resource_group_name", resourceGroup)
+	d.Set("server_name", serverName)
 	d.Set("login", resp.Login)
 	d.Set("object_id", resp.Sid.String())
 	d.Set("tenant_id", resp.TenantID.String())
@@ -148,18 +152,16 @@ func resourceMySQLAdministratorDelete(d *schema.ResourceData, meta interface{}) 
 	ctx, cancel := timeouts.ForDelete(meta.(*clients.Client).StopContext, d)
 	defer cancel()
 
-	id, err := parse.AzureActiveDirectoryAdministratorID(d.Id())
+	id, err := azure.ParseAzureResourceID(d.Id())
 	if err != nil {
 		return err
 	}
 
-	future, err := client.Delete(ctx, id.ResourceGroup, id.ServerName)
-	if err != nil {
-		return fmt.Errorf("deleting %s: %+v", *id, err)
-	}
+	resourceGroup := id.ResourceGroup
+	serverName := id.Path["servers"]
 
-	if err := future.WaitForCompletionRef(ctx, client.Client); err != nil {
-		return fmt.Errorf("waiting for deletion of %s: %+v", *id, err)
+	if _, err = client.Delete(ctx, resourceGroup, serverName); err != nil {
+		return fmt.Errorf("Error deleting MySQL AD Administrator: %+v", err)
 	}
 
 	return nil

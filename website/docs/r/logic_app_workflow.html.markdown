@@ -15,7 +15,7 @@ Manages a Logic App Workflow.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "workflow-resources"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_logic_app_workflow" "example" {

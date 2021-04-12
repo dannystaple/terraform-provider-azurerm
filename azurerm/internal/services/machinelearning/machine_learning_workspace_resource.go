@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Azure/azure-sdk-for-go/services/containerregistry/mgmt/2019-05-01/containerregistry"
 	"github.com/Azure/azure-sdk-for-go/services/machinelearningservices/mgmt/2020-04-01/machinelearningservices"
-	"github.com/Azure/azure-sdk-for-go/services/preview/containerregistry/mgmt/2020-11-01-preview/containerregistry"
-	"github.com/Azure/azure-sdk-for-go/services/storage/mgmt/2021-01-01/storage"
+	"github.com/Azure/azure-sdk-for-go/services/storage/mgmt/2019-06-01/storage"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/helpers/azure"
@@ -21,15 +21,6 @@ import (
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/tf/suppress"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/internal/timeouts"
 	"github.com/terraform-providers/terraform-provider-azurerm/azurerm/utils"
-)
-
-// TODO -- remove this type when issue https://github.com/Azure/azure-rest-api-specs/issues/13546 is resolved
-type WorkspaceSku string
-
-const (
-	Basic WorkspaceSku = "Basic"
-	// TODO -- remove Enterprise in 3.0 which has been deprecated here: https://docs.microsoft.com/en-us/azure/machine-learning/concept-workspace#what-happened-to-enterprise-edition
-	Enterprise WorkspaceSku = "Enterprise"
 )
 
 func resourceMachineLearningWorkspace() *schema.Resource {
@@ -147,9 +138,8 @@ func resourceMachineLearningWorkspace() *schema.Resource {
 				Optional: true,
 				Default:  "Basic",
 				ValidateFunc: validation.StringInSlice([]string{
-					string(Basic),
-					// TODO -- remove Enterprise in 3.0 which has been deprecated here: https://docs.microsoft.com/en-us/azure/machine-learning/concept-workspace#what-happened-to-enterprise-edition
-					string(Enterprise),
+					"Basic",
+					"Enterprise",
 				}, true),
 			},
 
@@ -217,12 +207,12 @@ func resourceMachineLearningWorkspaceCreate(d *schema.ResourceData, meta interfa
 	}
 
 	accountsClient := meta.(*clients.Client).Storage.AccountsClient
-	if err := validateStorageAccount(ctx, *accountsClient, storageAccountId); err != nil {
+	if err := validateStorageAccount(ctx, accountsClient, storageAccountId); err != nil {
 		return fmt.Errorf("Error creating Machine Learning Workspace %q (Resource Group %q): %+v", name, resGroup, err)
 	}
 
 	registriesClient := meta.(*clients.Client).Containers.RegistriesClient
-	if err := validateContainerRegistry(ctx, *registriesClient, workspace.ContainerRegistry); err != nil {
+	if err := validateContainerRegistry(ctx, registriesClient, workspace.ContainerRegistry); err != nil {
 		return fmt.Errorf("Error creating Machine Learning Workspace %q (Resource Group %q): %+v", name, resGroup, err)
 	}
 
@@ -359,7 +349,7 @@ func resourceMachineLearningWorkspaceDelete(d *schema.ResourceData, meta interfa
 	return nil
 }
 
-func validateStorageAccount(ctx context.Context, client storage.AccountsClient, accountID string) error {
+func validateStorageAccount(ctx context.Context, client *storage.AccountsClient, accountID string) error {
 	if accountID == "" {
 		return fmt.Errorf("Error validating Storage Account: Empty ID")
 	}
@@ -384,7 +374,7 @@ func validateStorageAccount(ctx context.Context, client storage.AccountsClient, 
 	return nil
 }
 
-func validateContainerRegistry(ctx context.Context, client containerregistry.RegistriesClient, acrID *string) error {
+func validateContainerRegistry(ctx context.Context, client *containerregistry.RegistriesClient, acrID *string) error {
 	if acrID == nil {
 		return nil
 	}
@@ -397,8 +387,6 @@ func validateContainerRegistry(ctx context.Context, client containerregistry.Reg
 
 	acrName := id.Path["registries"]
 	resourceGroup := id.ResourceGroup
-	client.SubscriptionID = id.SubscriptionID
-
 	acr, err := client.Get(ctx, resourceGroup, acrName)
 	if err != nil {
 		return fmt.Errorf("Error validating Container Registry %q (Resource Group %q): %+v", acrName, resourceGroup, err)

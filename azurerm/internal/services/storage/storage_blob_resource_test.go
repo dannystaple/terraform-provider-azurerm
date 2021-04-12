@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"testing"
 
@@ -196,7 +197,7 @@ func TestAccStorageBlob_blockFromExistingBlob(t *testing.T) {
 }
 
 func TestAccStorageBlob_blockFromLocalFile(t *testing.T) {
-	sourceBlob, err := os.CreateTemp("", "")
+	sourceBlob, err := ioutil.TempFile("", "")
 	if err != nil {
 		t.Fatalf("Failed to create local source blob file")
 	}
@@ -220,7 +221,7 @@ func TestAccStorageBlob_blockFromLocalFile(t *testing.T) {
 }
 
 func TestAccStorageBlob_blockFromLocalFileWithContentMd5(t *testing.T) {
-	sourceBlob, err := os.CreateTemp("", "")
+	sourceBlob, err := ioutil.TempFile("", "")
 	if err != nil {
 		t.Fatalf("Failed to create local source blob file")
 	}
@@ -337,12 +338,12 @@ func TestAccStorageBlob_pageFromExistingBlob(t *testing.T) {
 				check.That(data.ResourceName).ExistsInAzure(r),
 			),
 		},
-		data.ImportStep("parallelism", "size", "type", "source_uri"),
+		data.ImportStep("parallelism", "size", "type"),
 	})
 }
 
 func TestAccStorageBlob_pageFromLocalFile(t *testing.T) {
-	sourceBlob, err := os.CreateTemp("", "")
+	sourceBlob, err := ioutil.TempFile("", "")
 	if err != nil {
 		t.Fatalf("Failed to create local source blob file")
 	}
@@ -361,7 +362,7 @@ func TestAccStorageBlob_pageFromLocalFile(t *testing.T) {
 				data.CheckWithClient(r.blobMatchesFile(blobs.PageBlob, sourceBlob.Name())),
 			),
 		},
-		data.ImportStep("parallelism", "size", "type", "source"),
+		data.ImportStep("parallelism", "size", "type"),
 	})
 }
 
@@ -491,7 +492,7 @@ func (r StorageBlobResource) blobMatchesFile(kind blobs.BlobType, filePath strin
 		actualContents := actualProps.Contents
 
 		// local file for comparison
-		expectedContents, err := os.ReadFile(filePath)
+		expectedContents, err := ioutil.ReadFile(filePath)
 		if err != nil {
 			return err
 		}

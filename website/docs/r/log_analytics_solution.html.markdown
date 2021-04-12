@@ -15,7 +15,7 @@ Manages a Log Analytics (formally Operational Insights) Solution.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "k8s-log-analytics-test"
-  location = "West Europe"
+  location = "westeurope"
 }
 
 resource "random_id" "workspace" {

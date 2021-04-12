@@ -17,7 +17,7 @@ Manages an IotHub ServiceBus Queue Endpoint
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_servicebus_namespace" "example" {

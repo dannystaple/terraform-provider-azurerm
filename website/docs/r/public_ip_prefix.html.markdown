@@ -14,7 +14,7 @@ Manages a Public IP Prefix.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
+  name     = "resourceGroup1"
   location = "West Europe"
 }
 

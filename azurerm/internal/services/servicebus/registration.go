@@ -27,8 +27,6 @@ func (r Registration) SupportedDataSources() map[string]*schema.Resource {
 		"azurerm_servicebus_topic_authorization_rule":     dataSourceServiceBusTopicAuthorizationRule(),
 		"azurerm_servicebus_queue_authorization_rule":     dataSourceServiceBusQueueAuthorizationRule(),
 		"azurerm_servicebus_subscription":                 dataSourceServiceBusSubscription(),
-		"azurerm_servicebus_topic":                        dataSourceServiceBusTopic(),
-		"azurerm_servicebus_queue":                        dataSourceServiceBusQueue(),
 	}
 }
 

@@ -517,12 +517,12 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "test" {
-  name     = "acctestRG-ehn-%[1]d-1"
+  name     = "acctestRG-ehn-%[1]d"
   location = "%[2]s"
 }
 
 resource "azurerm_resource_group" "test2" {
-  name     = "acctestRG-ehn-%[1]d"
+  name     = "acctestRG2-ehn-%[1]d"
   location = "%[3]s"
 }
 

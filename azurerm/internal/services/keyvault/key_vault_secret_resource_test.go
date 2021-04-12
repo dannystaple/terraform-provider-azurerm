@@ -156,22 +156,22 @@ func TestAccKeyVaultSecret_recovery(t *testing.T) {
 
 	data.ResourceTest(t, r, []resource.TestStep{
 		{
-			Config: r.softDeleteRecovery(data, false, "first"),
+			Config: r.softDeleteRecovery(data, false),
 			Check: resource.ComposeTestCheckFunc(
 				check.That(data.ResourceName).ExistsInAzure(r),
-				check.That(data.ResourceName).Key("value").HasValue("first"),
+				check.That(data.ResourceName).Key("value").HasValue("rick-and-morty"),
 			),
 		},
 		{
-			Config:  r.softDeleteRecovery(data, false, "first"),
+			Config:  r.softDeleteRecovery(data, false),
 			Destroy: true,
 		},
 		{
 			// purge true here to make sure when we end the test there's no soft-deleted items left behind
-			Config: r.softDeleteRecovery(data, true, "second"),
+			Config: r.softDeleteRecovery(data, true),
 			Check: resource.ComposeTestCheckFunc(
 				check.That(data.ResourceName).ExistsInAzure(r),
-				check.That(data.ResourceName).Key("value").HasValue("second"),
+				check.That(data.ResourceName).Key("value").HasValue("rick-and-morty"),
 			),
 		},
 	})
@@ -395,7 +395,7 @@ resource "azurerm_key_vault_secret" "test" {
 `, r.template(data), data.RandomString)
 }
 
-func (r KeyVaultSecretResource) softDeleteRecovery(data acceptance.TestData, purge bool, value string) string {
+func (r KeyVaultSecretResource) softDeleteRecovery(data acceptance.TestData, purge bool) string {
 	return fmt.Sprintf(`
 provider "azurerm" {
   features {
@@ -410,10 +410,10 @@ provider "azurerm" {
 
 resource "azurerm_key_vault_secret" "test" {
   name         = "secret-%s"
-  value        = "%s"
+  value        = "rick-and-morty"
   key_vault_id = azurerm_key_vault.test.id
 }
-`, purge, r.template(data), data.RandomString, value)
+`, purge, r.template(data), data.RandomString)
 }
 
 func (KeyVaultSecretResource) withExternalAccessPolicy(data acceptance.TestData) string {

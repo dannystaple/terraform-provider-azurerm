@@ -134,7 +134,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "test" {
-  name     = "acctestRG-synapse-%d"
+  name     = "acctest-Synapse-%d"
   location = "%s"
 }
 

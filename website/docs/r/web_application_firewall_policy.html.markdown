@@ -15,7 +15,7 @@ Manages a Azure Web Application Firewall Policy instance.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-rg"
-  location = "West Europe"
+  location = "West US 2"
 }
 
 resource "azurerm_web_application_firewall_policy" "example" {
@@ -121,10 +121,6 @@ The following arguments are supported:
 * `policy_settings` - (Optional) A `policy_settings` block as defined below.
 
 * `managed_rules` - (Required) A `managed_rules` blocks as defined below.
-
-* `http_listener_ids` - (Optional) A list of HTTP Listener IDs from an `azurerm_application_gateway`.
-
-* `path_based_rule_ids` - (Optional) A list of URL Path Map Path Rule IDs from an `azurerm_application_gateway`.
 
 * `tags` - (Optional) A mapping of tags to assign to the Web Application Firewall Policy.
 

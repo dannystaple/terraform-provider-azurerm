@@ -18,7 +18,7 @@ taint the resource so the `azurerm_data_lake_store_file` gets recreated with the
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "northeurope"
 }
 
 resource "azurerm_data_lake_store" "example" {

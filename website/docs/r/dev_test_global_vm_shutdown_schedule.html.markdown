@@ -17,7 +17,7 @@ this resource applies only to standard VMs, not DevTest Lab VMs. To manage autom
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "sample-rg"
-  location = "West Europe"
+  location = "eastus"
 }
 
 resource "azurerm_virtual_network" "example" {

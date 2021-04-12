@@ -16,8 +16,8 @@ Allows you to set a user or group as the AD administrator for an Azure SQL serve
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "acceptanceTestResourceGroup1"
+  location = "West US"
 }
 
 resource "azurerm_sql_server" "example" {

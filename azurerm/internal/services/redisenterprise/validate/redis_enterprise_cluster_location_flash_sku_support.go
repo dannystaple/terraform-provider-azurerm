@@ -40,6 +40,5 @@ func friendlyInvalidRedisEnterpriseClusterFlashLocations() []string {
 		"East Asia",
 		"UK West",
 		"East US 2 EUAP",
-		"South India",
 	}
 }

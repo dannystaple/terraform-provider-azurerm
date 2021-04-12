@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"runtime"
 	"strings"
@@ -128,7 +129,7 @@ func (sbu BlobUpload) createEmptyBlockBlob(ctx context.Context) error {
 }
 
 func (sbu BlobUpload) uploadBlockBlobFromContent(ctx context.Context) error {
-	tmpFile, err := os.CreateTemp(os.TempDir(), "upload-")
+	tmpFile, err := ioutil.TempFile(os.TempDir(), "upload-")
 	if err != nil {
 		return fmt.Errorf("Error creating temporary file: %s", err)
 	}

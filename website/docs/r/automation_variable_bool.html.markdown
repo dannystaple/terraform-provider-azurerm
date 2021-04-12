@@ -16,7 +16,7 @@ Manages a boolean variable in Azure Automation
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "tfex-example-rg"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_automation_account" "example" {

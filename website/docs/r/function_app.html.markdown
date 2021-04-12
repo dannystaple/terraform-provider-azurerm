@@ -19,7 +19,7 @@ For an example, check the `azurerm_app_service_virtual_network_swift_connection`
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "azure-functions-test-rg"
-  location = "West Europe"
+  location = "westus2"
 }
 
 resource "azurerm_storage_account" "example" {
@@ -55,7 +55,7 @@ resource "azurerm_function_app" "example" {
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "azure-functions-cptest-rg"
-  location = "West Europe"
+  location = "westus2"
 }
 
 resource "azurerm_storage_account" "example" {
@@ -92,7 +92,7 @@ resource "azurerm_function_app" "example" {
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "azure-functions-cptest-rg"
-  location = "West Europe"
+  location = "westus2"
 }
 
 resource "azurerm_storage_account" "example" {

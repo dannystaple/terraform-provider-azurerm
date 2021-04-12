@@ -16,7 +16,7 @@ import (
 
 type RoleDefinitionResource struct{}
 
-func TestAccRoleDefinition_basic(t *testing.T) {
+func TestAccAzureRMRoleDefinition_basic(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	r := RoleDefinitionResource{}
 
@@ -31,7 +31,7 @@ func TestAccRoleDefinition_basic(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_requiresImport(t *testing.T) {
+func TestAccAzureRMRoleDefinition_requiresImport(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	id := uuid.New().String()
 
@@ -50,7 +50,7 @@ func TestAccRoleDefinition_requiresImport(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_complete(t *testing.T) {
+func TestAccAzureRMRoleDefinition_complete(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	r := RoleDefinitionResource{}
 
@@ -65,7 +65,7 @@ func TestAccRoleDefinition_complete(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_update(t *testing.T) {
+func TestAccAzureRMRoleDefinition_update(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	r := RoleDefinitionResource{}
 	id := uuid.New().String()
@@ -88,7 +88,7 @@ func TestAccRoleDefinition_update(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_updateEmptyId(t *testing.T) {
+func TestAccAzureRMRoleDefinition_updateEmptyId(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 
 	r := RoleDefinitionResource{}
@@ -111,7 +111,7 @@ func TestAccRoleDefinition_updateEmptyId(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_emptyName(t *testing.T) {
+func TestAccAzureRMRoleDefinition_emptyName(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	r := RoleDefinitionResource{}
 
@@ -126,22 +126,7 @@ func TestAccRoleDefinition_emptyName(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_emptyPermissions(t *testing.T) {
-	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
-	r := RoleDefinitionResource{}
-
-	data.ResourceTest(t, r, []resource.TestStep{
-		{
-			Config: r.emptyPermissions(data),
-			Check: resource.ComposeTestCheckFunc(
-				check.That(data.ResourceName).ExistsInAzure(r),
-			),
-		},
-		data.ImportStep(),
-	})
-}
-
-func TestAccRoleDefinition_managementGroup(t *testing.T) {
+func TestAccAzureRMRoleDefinition_managementGroup(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	r := RoleDefinitionResource{}
 
@@ -156,7 +141,7 @@ func TestAccRoleDefinition_managementGroup(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_assignToSmallerScope(t *testing.T) {
+func TestAccAzureRMRoleDefinition_assignToSmallerScope(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 	r := RoleDefinitionResource{}
 
@@ -171,7 +156,7 @@ func TestAccRoleDefinition_assignToSmallerScope(t *testing.T) {
 	})
 }
 
-func TestAccRoleDefinition_noAssignableScope(t *testing.T) {
+func TestAccAzureRMRoleDefinition_noAssignableScope(t *testing.T) {
 	data := acceptance.BuildTestData(t, "azurerm_role_definition", "test")
 
 	r := RoleDefinitionResource{}
@@ -290,9 +275,9 @@ data "azurerm_subscription" "primary" {
 
 resource "azurerm_role_definition" "test" {
   role_definition_id = "%s"
-  name               = "acctestrd-%d"
+  name               = "acctestrd-%d-updated"
   scope              = data.azurerm_subscription.primary.id
-  description        = "Acceptance Test Role Definition Updated"
+  description        = "Acceptance Test Role Definition"
 
   permissions {
     actions     = ["*"]
@@ -356,28 +341,6 @@ resource "azurerm_role_definition" "test" {
 `, data.RandomInteger)
 }
 
-func (r RoleDefinitionResource) emptyPermissions(data acceptance.TestData) string {
-	return fmt.Sprintf(`
-provider "azurerm" {
-  features {}
-}
-
-data "azurerm_subscription" "primary" {
-}
-
-resource "azurerm_resource_group" "test" {
-  name     = "acctestrg-%d"
-  location = %q
-}
-
-resource "azurerm_role_definition" "test" {
-  name              = "acctestrd-%d"
-  scope             = azurerm_resource_group.test.id
-  assignable_scopes = [azurerm_resource_group.test.id]
-}
-`, data.RandomInteger, data.Locations.Primary, data.RandomInteger)
-}
-
 func (RoleDefinitionResource) managementGroup(id string, data acceptance.TestData) string {
 	return fmt.Sprintf(`
 provider "azurerm" {
@@ -418,7 +381,7 @@ data "azurerm_subscription" "primary" {
 }
 
 resource "azurerm_resource_group" "test" {
-  name     = "acctestRG-%d"
+  name     = "acctestrg-%d"
   location = "%s"
 }
 

@@ -14,7 +14,7 @@ Manages a Automation Runbook.
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
+  name     = "resourceGroup1"
   location = "West Europe"
 }
 
@@ -46,7 +46,7 @@ resource "azurerm_automation_runbook" "example" {
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
+  name     = "resourceGroup1"
   location = "West Europe"
 }
 

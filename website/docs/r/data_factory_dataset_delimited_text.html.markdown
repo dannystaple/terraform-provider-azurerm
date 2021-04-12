@@ -15,7 +15,7 @@ Manages an Azure Delimited Text Dataset inside an Azure Data Factory.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "northeurope"
 }
 
 resource "azurerm_data_factory" "example" {

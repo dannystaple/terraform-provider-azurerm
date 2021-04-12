@@ -15,7 +15,7 @@ Manages a Kusto (also known as Azure Data Explorer) Cluster
 ```hcl
 resource "azurerm_resource_group" "rg" {
   name     = "my-kusto-cluster-rg"
-  location = "West Europe"
+  location = "East US"
 }
 
 resource "azurerm_kusto_cluster" "example" {

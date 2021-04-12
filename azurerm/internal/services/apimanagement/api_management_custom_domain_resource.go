@@ -163,7 +163,6 @@ func apiManagementCustomDomainCreateUpdate(d *schema.ResourceData, meta interfac
 
 func apiManagementCustomDomainRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*clients.Client).ApiManagement.ServiceClient
-	environment := meta.(*clients.Client).Account.Environment
 	ctx, cancel := timeouts.ForRead(meta.(*clients.Client).StopContext, d)
 	defer cancel()
 
@@ -188,8 +187,7 @@ func apiManagementCustomDomainRead(d *schema.ResourceData, meta interface{}) err
 	d.Set("api_management_id", resp.ID)
 
 	if resp.ServiceProperties != nil && resp.ServiceProperties.HostnameConfigurations != nil {
-		apimHostNameSuffix := environment.APIManagementHostNameSuffix
-		configs := flattenApiManagementHostnameConfiguration(resp.ServiceProperties.HostnameConfigurations, d, *resp.Name, apimHostNameSuffix)
+		configs := flattenApiManagementHostnameConfiguration(resp.ServiceProperties.HostnameConfigurations, d)
 		for _, config := range configs {
 			for key, v := range config.(map[string]interface{}) {
 				// lintignore:R001
@@ -307,7 +305,7 @@ func expandApiManagementCustomDomains(input *schema.ResourceData) *[]apimanageme
 	return &results
 }
 
-func flattenApiManagementHostnameConfiguration(input *[]apimanagement.HostnameConfiguration, d *schema.ResourceData, name, apimHostNameSuffix string) []interface{} {
+func flattenApiManagementHostnameConfiguration(input *[]apimanagement.HostnameConfiguration, d *schema.ResourceData) []interface{} {
 	results := make([]interface{}, 0)
 	if input == nil {
 		return results
@@ -321,11 +319,6 @@ func flattenApiManagementHostnameConfiguration(input *[]apimanagement.HostnameCo
 
 	for _, config := range *input {
 		output := make(map[string]interface{})
-
-		// There'll always be a default custom domain with hostName "apim_name.azure-api.net" and Type "Proxy", which should be ignored
-		if *config.HostName == strings.ToLower(name)+"."+apimHostNameSuffix && config.Type == apimanagement.HostnameTypeProxy {
-			continue
-		}
 
 		if config.HostName != nil {
 			output["host_name"] = *config.HostName

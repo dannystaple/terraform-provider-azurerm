@@ -171,7 +171,7 @@ func (r MariaDbConfigurationResource) interactiveTimeout(data acceptance.TestDat
 }
 
 func (r MariaDbConfigurationResource) logSlowAdminStatements(data acceptance.TestData) string {
-	return r.template(data, "log_slow_admin_statements", "On")
+	return r.template(data, "log_slow_admin_statements", "on")
 }
 
 func (r MariaDbConfigurationResource) template(data acceptance.TestData, name string, value string) string {

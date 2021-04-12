@@ -27,7 +27,7 @@ data "azurerm_subscription" "current" {}
 
 resource "azurerm_resource_group" "my-group" {
   name     = "mygroup"
-  location = "West Europe"
+  location = "uksouth"
 }
 
 resource "azurerm_dashboard" "my-board" {

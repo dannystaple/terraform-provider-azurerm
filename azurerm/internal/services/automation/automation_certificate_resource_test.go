@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"os"
+	"io/ioutil"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -22,8 +22,8 @@ type AutomationCertificateResource struct {
 }
 
 var (
-	testCertThumbprintRaw, _ = os.ReadFile(filepath.Join("testdata", "automation_certificate_test.thumb"))
-	testCertRaw, _           = os.ReadFile(filepath.Join("testdata", "automation_certificate_test.pfx"))
+	testCertThumbprintRaw, _ = ioutil.ReadFile(filepath.Join("testdata", "automation_certificate_test.thumb"))
+	testCertRaw, _           = ioutil.ReadFile(filepath.Join("testdata", "automation_certificate_test.pfx"))
 )
 
 var testCertBase64 = base64.StdEncoding.EncodeToString(testCertRaw)

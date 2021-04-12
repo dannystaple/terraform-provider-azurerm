@@ -19,7 +19,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "Southeast Asia"
 }
 
 data "azurerm_client_config" "current" {

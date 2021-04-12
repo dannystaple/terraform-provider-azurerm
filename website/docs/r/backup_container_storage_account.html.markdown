@@ -17,7 +17,7 @@ Manages registration of a storage account with Azure Backup. Storage accounts mu
 ```hcl
 resource "azurerm_resource_group" "rg" {
   name     = "tfex-network-mapping-primary"
-  location = "West Europe"
+  location = "West US"
 }
 
 resource "azurerm_recovery_services_vault" "vault" {

@@ -19,7 +19,7 @@ Manages the subscription's Security Center Workspace.
 ```hcl
 resource "azurerm_resource_group" "example" {
   name     = "tfex-security-workspace"
-  location = "West Europe"
+  location = "westus"
 }
 
 resource "azurerm_log_analytics_workspace" "example" {

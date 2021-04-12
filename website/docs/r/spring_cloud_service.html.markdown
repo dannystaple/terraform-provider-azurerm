@@ -19,7 +19,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
-  location = "West Europe"
+  location = "Southeast Asia"
 }
 
 resource "azurerm_application_insights" "example" {
@@ -43,7 +43,6 @@ resource "azurerm_spring_cloud_service" "example" {
 
   trace {
     instrumentation_key = azurerm_application_insights.example.instrumentation_key
-    sample_rate         = 10.0
   }
 
   tags = {
@@ -147,8 +146,6 @@ The `ssh_auth` block supports the following:
 The `trace` block supports the following:
 
 * `instrumentation_key` - (Required) The Instrumentation Key used for Application Insights.
-
-* `sample_rate` - (Optional) The sampling rate of Application Insights Agent. Must be between `0.0` and `100.0`. Defaults to `10.0`.
 
 ## Attributes Reference
 

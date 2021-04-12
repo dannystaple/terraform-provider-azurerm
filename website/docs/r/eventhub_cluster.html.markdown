@@ -15,8 +15,8 @@ Manages an EventHub Cluster
 
 ```hcl
 resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
+  name     = "resourceGroup1"
+  location = "West US 2"
 }
 
 resource "azurerm_eventhub_cluster" "test" {

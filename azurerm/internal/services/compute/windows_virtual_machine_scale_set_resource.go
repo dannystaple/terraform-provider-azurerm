@@ -155,6 +155,7 @@ func resourceWindowsVirtualMachineScaleSet() *schema.Resource {
 			"health_probe_id": {
 				Type:         schema.TypeString,
 				Optional:     true,
+				ForceNew:     true,
 				ValidateFunc: azure.ValidateResourceID,
 			},
 
