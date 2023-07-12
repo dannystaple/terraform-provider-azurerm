@@ -252,7 +252,7 @@ The `certificate` block supports the following:
 * `password` - (Optional) The password associated with the certificate.
 
 ~> **NOTE:** A PEM certificate is already base64 encoded. To successfully import contents should include a PEM encoded X509 certificate and a private_key in pkcs8 format (use 
-`openssl pkcs8 -topk8 -nocrypt -in private_key.pem > private_key_pk8.pem`). There should only be linux style \n line endings and the whole block should have the PEM begin/end blocks around the certificate data and the private key data.
+`openssl pkcs8 -topk8 -nocrypt -in private_key.pem > private_key_pk8.pem`). There should only be linux style \n line endings and the whole block should have the PEM begin/end blocks around the certificate data and the private key data. These terminators should be generated when PEM documents are created and look like `-----BEGIN CERTIFICATE-----`,`-----END CERTIFICATE-----` and `-----BEGIN PRIVATE KEY-----`, `-----END PRIVATE KEY-----`.
 
 ---
 
